@@ -13,3 +13,9 @@ $params = [
 	'dbuser' => '',
 	'dbpassword' => '',
 	'dbname' => '',
+        
+       // site settings
+	'sitename' => '',
+	'siteemail' => '',
+	'wwwroot' => '',
+	'dataroot' => '',
