@@ -19,3 +19,10 @@ $params = [
 	'siteemail' => '',
 	'wwwroot' => '',
 	'dataroot' => '',
+  
+       // admin account
+	'displayname' => '',
+	'email' => '',
+	'username' => '',
+	'password' => '',
+];
