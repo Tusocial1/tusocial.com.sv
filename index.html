@@ -1,1 +1,119 @@
-<?php$autoload_path = __DIR__ . '/vendor/autoload.php';$autoload_available = include_once($autoload_path);if (!$autoload_available) {	die("Couldn't include '$autoload_path'. Did you run `composer install`?");} return \Elgg\Application::index();
+Customize Login Page
+The universal login page will be served by default at threadsapp.us.auth0.com/login.
+You can use your own domain by configuring it in Custom Domains.
+
+
+1
+<!DOCTYPE html>
+2
+<html>
+3
+<head>
+4
+  <meta charset="utf-8">
+5
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+6
+  <title>Sign In with Auth0</title>
+7
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+8
+</head>
+9
+<body>
+10
+​
+11
+  <!--[if IE 8]>
+12
+  <script src="//cdnjs.cloudflare.com/ajax/libs/ie8/0.2.5/ie8.js"></script>
+13
+  <![endif]-->
+14
+​
+15
+  <!--[if lte IE 9]>
+16
+  <script src="https://cdn.auth0.com/js/base64.js"></script>
+17
+  <script src="https://cdn.auth0.com/js/es5-shim.min.js"></script>
+18
+  <![endif]-->
+19
+​
+20
+  <script src="https://cdn.auth0.com/js/lock/12.1/lock.min.js"></script>
+21
+  <script>
+22
+    // Decode utf8 characters properly
+23
+    var config = JSON.parse(decodeURIComponent(escape(window.atob('@@config@@'))));
+24
+    config.extraParams = config.extraParams || {};
+25
+    var connection = config.connection;
+26
+    var prompt = config.prompt;
+27
+    var languageDictionary;
+28
+    var language;
+29
+​
+30
+    if (config.dict && config.dict.signin && config.dict.signin.title) {
+31
+      languageDictionary = { title: config.dict.signin.title };
+32
+    } else if (typeof config.dict === 'string') {
+33
+      language = config.dict;
+34
+    }
+35
+    var loginHint = config.extraParams.login_hint;
+36
+    var colors = config.colors || {};
+37
+​
+38
+    // Available Lock configuration options: https://auth0.com/docs/libraries/lock/lock-configuration
+39
+    var lock = new Auth0Lock(config.clientID, config.auth0Domain, {
+40
+      auth: {
+41
+        redirectUrl: config.callbackURL,
+42
+        responseType: (config.internalOptions || {}).response_type ||
+43
+          (config.callbackOnLocationHash ? 'token' : 'code'),
+44
+        params: config.internalOptions
+45
+      },
+46
+      configurationBaseUrl: config.clientConfigurationBaseUrl,
+47
+      overrides: {
+48
+        __tenant: config.auth0Tenant,
+49
+        __token_issuer: config.authorizationServer.issuer
+50
+      },
+51
+      assetsUrl:  config.assetsUrl,
+52
+      allowedConnections: connection ? [connection] : null,
+53
+      rememberLastLogin: !prompt,
+54
+      language: language,
+55
+      languageBaseUrl: config.languageBaseUrl,
+56
+      languageDictionary: languageDictionary,
+57
+      theme: {
